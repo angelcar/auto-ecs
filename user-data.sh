@@ -9,7 +9,6 @@ cd /home/ec2-user/go/src/github.com/aws/amazon-ecs-agent
 sudo systemctl stop ecs
 make test-registry
 make release
-docker tag amazon/amazon-ecs-agent:latest amazon/amazon-ecs-agent:make
 
 make test # unit tests
 make run-integ-tests

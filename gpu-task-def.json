@@ -1,0 +1,55 @@
+{
+  "requiresCompatibilities": [
+    "EC2"
+  ],
+  "containerDefinitions": [
+    {
+      "command": [
+        "tensorflow_model_server --port=8500 --rest_api_port=8501 --model_name=saved_model_half_plus_two_gpu  --model_base_path=/models/saved_model_half_plus_two_gpu"
+      ],
+      "entryPoint": [
+        "sh",
+        "-c"
+      ],
+      "name": "EC2TFInference",
+      "image": "841569659894.dkr.ecr.us-east-1.amazonaws.com/sample_tf_inference_images:gpu_with_half_plus_two_model",
+      "memory": 8111,
+      "cpu": 256,
+      "resourceRequirements": [
+        {
+          "type": "GPU",
+          "value": "1"
+        }
+      ],
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 8500,
+          "protocol": "tcp",
+          "containerPort": 8500
+        },
+        {
+          "hostPort": 8501,
+          "protocol": "tcp",
+          "containerPort": 8501
+        },
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "auto-ecs-cluster",
+          "awslogs-region": "us-west-2",
+          "awslogs-stream-prefix": "EC2TFInference"
+        }
+      }
+    }
+  ],
+  "volumes": [],
+  "networkMode": "bridge",
+  "placementConstraints": [],
+  "family": "Ec2TFInference"
+}
