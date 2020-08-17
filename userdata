@@ -44,6 +44,17 @@ git config --global alias.co checkout
 git config --global alias.br branch
 git config --global alias.ci commit
 git config --global alias.st status
+git config --global pull.rebase true
+git config --global branch.autosetuprebase always
+
+
+
+clean-agent() {
+    cd /home/ec2-user/go/src/github.com/aws/amazon-ecs-agent
+    sudo rm -rf amazon-ecs-cni-plugins amazon-vpc-cni-plugins
+    mkdir amazon-ecs-cni-plugins amazon-vpc-cni-plugins
+    make clean
+}
 EOF
 wget -O "/tmp/tig.rpm" "http://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/t/tig-2.4.0-1.el7.x86_64.rpm"
 yum install -y /tmp/tig.rpm
@@ -54,15 +65,6 @@ echo export GOPATH="/home/ec2-user/go"  >> /home/ec2-user/.zshrc
 echo export PATH=$PATH:/usr/local/go/bin >> /home/ec2-user/.zshrc
 
 mkdir -p /home/ec2-user/go/src/github.com/aws
-git config --global pull.rebase true
-git config --global branch.autosetuprebase always
-cd /home/ec2-user/go/src/github.com/aws
-git clone https://github.com/angelcar/amazon-ecs-agent.git
-cd amazon-ecs-agent
-git config --global pull.rebase true
-git config --global branch.autosetuprebase always
-git remote add upstream https://github.com/aws/amazon-ecs-agent.git
-git fetch --all
 
 #Install Prezto
 cd /home/ec2-user
