@@ -7,7 +7,7 @@ if [[ "$region" == "" ]]; then
     exit 1
 fi
 
-tmp=$(head -c120 /dev/urandom | tr -dc 'a-z0-9' | head -c2)
+tmp=$(uuidgen)
 clusterName="$tmp"
 
 # configure the cluster
@@ -30,7 +30,7 @@ aws ec2 authorize-security-group-ingress --region "$region" --group-id "$sgID" -
 # allow inbound windows RDP connections (this is used my windows remote desktop)
 aws ec2 authorize-security-group-ingress --region "$region" --group-id "$sgID" --protocol tcp --port 3389 --cidr 0.0.0.0/0
 
-cat << EOF > "./clusters/$clusterName.json"
+cat << EOF > "./.clusters/$clusterName.json"
 {
   "clusterName": "$clusterName",
   "vpcID": "$vpcID",
