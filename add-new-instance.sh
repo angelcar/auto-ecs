@@ -7,17 +7,28 @@ if [[ "$CLUSTERNAME" == "" ]]; then
     exit 1
 fi
 
-SGID=$(jq -r .sgID < "./clusters/$CLUSTERNAME.json")
-SUBNETID=$(jq -r .subnet1ID < "./clusters/$CLUSTERNAME.json")
-CLUSTERNAME=$(jq -r .clusterName < "./clusters/$CLUSTERNAME.json")
-REGION=$(jq -r .region < "./clusters/$CLUSTERNAME.json")
+echo "CLUSTERNAME=$CLUSTERNAME"
+
+SGID=$(jq -r .sgID < "./.clusters/$CLUSTERNAME.json")
+SUBNETID=$(jq -r .subnet2ID < "./.clusters/$CLUSTERNAME.json")
+CLUSTERNAME=$(jq -r .clusterName < "./.clusters/$CLUSTERNAME.json")
+REGION=$(jq -r .region < "./.clusters/$CLUSTERNAME.json")
+
+echo "SGID=$SGID"
+echo "SUBNETID=$SUBNETID"
+echo "CLUSTERNAME=$CLUSTERNAME"
+echo "REGION=$REGION"
 
 SSH_KEY_NAME=$(jq -r ".ssh_keypairs.\"$REGION\"" < config.json)
 INSTANCE_TYPE=$(jq -r .ec2_container_instance_type < ./config.json)
 
-AMIID=$(aws ssm get-parameters --region "$REGION" --names /aws/service/ecs/optimized-ami/amazon-linux-2/recommended | jq -r ".Parameters[0].Value" | jq -r .image_id)
+echo "SSH_KEY_NAME=$SSH_KEY_NAME"
+echo "INSTANCE_TYPE=$INSTANCE_TYPE"
 
-# Windows userdata:
+AMIID=$(aws ssm get-parameters --region "$REGION" --names /aws/service/ecs/optimized-ami/amazon-linux-2/arm64/recommended/image_id | jq -r ".Parameters[0].Value")
+
+echo "AMIID=$AMIID"
+
 #cat << EOF > /tmp/userdata
 #<powershell>
 #[Environment]::SetEnvironmentVariable("ECS_ENABLE_SPOT_INSTANCE_DRAINING", "true", "Machine")
