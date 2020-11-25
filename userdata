@@ -62,7 +62,9 @@ yum install -y /tmp/tig.rpm
 wget -O "/tmp/go.tar.gz" "https://golang.org/dl/go1.15.2.linux-amd64.tar.gz"
 tar -C /usr/local -xzf /tmp/go.tar.gz
 echo export GOPATH="/home/ec2-user/go"  >> /home/ec2-user/.zshrc
-echo export PATH=$PATH:/usr/local/go/bin >> /home/ec2-user/.zshrc
+echo export PATH=$PATH:/usr/local/go/bin:/home/ec2-user/go/bin >> /home/ec2-user/.zshrc
+
+go get github.com/br0xen/boltbrowser
 
 mkdir -p /home/ec2-user/go/src/github.com/aws
 
