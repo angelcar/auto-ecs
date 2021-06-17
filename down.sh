@@ -7,6 +7,12 @@ if [[ "$CLUSTERNAME" == "" ]]; then
     exit 1
 fi
 
+REGION="${2:-}"
+if [[ "$REGION" == "" ]]; then
+    echo "You must specify a region"
+    exit 1
+fi
+
+ecs-cli down --region "$REGION" --force --cluster-config "$CLUSTERNAME"
 rm "./.clusters/$CLUSTERNAME.json"
-ecs-cli down --force --cluster-config "$CLUSTERNAME"
 
